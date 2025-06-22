@@ -19,7 +19,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     ProductRepository productRepository;
 
-    @Value("${project.imagesPath")
+    @Value("${project.imagesPath}")
     private String imagePath;
 
     public String uploadImage(MultipartFile image) {
