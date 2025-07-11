@@ -4,17 +4,24 @@
 
 
 ### Learnings
-- API theory
+- **API theory**
+  - Best practices
+  - Methods
+  - Status
+  - Exception Handling
   - Pagination and sorting
-- Java
+- **Java**
   - DTOs
   - Controller, service, repository
-- Spring Boot
+- **Spring Boot**
   - Persistence
   - JPA (Jakarta Persistence API)
   - Lombok
-  - Spring security
-- Databases
+- **Databases**
   - H2
   - PostgreSQL & MySQL
-- Postman
+- **Security**
+  - Spring Security
+  - JWT
+  - Customizing auth
+- **Postman**
