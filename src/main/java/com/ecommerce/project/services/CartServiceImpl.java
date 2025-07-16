@@ -10,11 +10,15 @@ import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.repositories.CartItemRepository;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.ProductRepository;
+import com.ecommerce.project.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,6 +44,7 @@ public class CartServiceImpl implements CartService {
         Cart userCart = cartRepository.findCartByEmail(authUtil.loggedInEmail());
         if (userCart == null) {
             userCart = new Cart();
+            userCart.setTotalPrice(0.00);
             userCart.setUser(authUtil.loggedInUser());
             return cartRepository.save(userCart);
         } else {
@@ -63,7 +68,7 @@ public class CartServiceImpl implements CartService {
 
         cartItemRepository.findCartItemByCartIdAndProductId(cart.getCartId(), productId)
                 .ifPresent(cartItem -> {
-                    throw new ApiException("Product + " + product.getName() + " already exists in the cart");
+                    throw new ApiException("Product " + product.getName() + " already exists in the cart");
                 });
 
         if (product.getQuantity() == 0) {
@@ -104,5 +109,30 @@ public class CartServiceImpl implements CartService {
 
         cartDTO.setProducts(productDTOStream.toList());
         return cartDTO;
+    }
+
+    @Override
+    public List<CartDTO> getAllCarts() {
+        List<Cart> carts = cartRepository.findAll();
+        if (carts.isEmpty()) {
+            throw new ApiException("No carts available", HttpStatus.NOT_FOUND);
+        }
+
+        // Crear una lista de CartDTOs y agarrar el stream de todos los carts.
+        List<CartDTO> cartDTOs = carts.stream()
+                .map(cart -> {
+                    // Mapear cada cart a CartDTO.
+                    CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+                    // Crear una lista de ProductDTOs a partir de los cart items.
+                    List<ProductDTO> products = cart.getCartItems().stream()
+                            // Mapear cada producto dentro del cartItem a productDTO.
+                            .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class))
+                            .toList();
+                    // Setear la lista de ProductDTOs en el CartDTO.
+                    cartDTO.setProducts(products);
+                    return cartDTO;
+                }).toList();
+
+        return cartDTOs;
     }
 }
