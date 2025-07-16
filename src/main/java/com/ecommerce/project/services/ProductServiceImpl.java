@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
     {
         // Check if the category exists
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
 
         // Check if the product already exists in the category
         for (Product product : category.getProducts()) {
