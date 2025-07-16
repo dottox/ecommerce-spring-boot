@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query("SELECT c FROM Cart c WHERE c.user.email = ?1")
-    Optional<Cart> findCartByEmail(String email);
+    Cart findCartByEmail(String email);
 }
