@@ -113,26 +113,53 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartDTO> getAllCarts() {
+        // Get all carts from the repository
         List<Cart> carts = cartRepository.findAll();
         if (carts.isEmpty()) {
             throw new ApiException("No carts available", HttpStatus.NOT_FOUND);
         }
 
-        // Crear una lista de CartDTOs y agarrar el stream de todos los carts.
+        // Create a list of CartDTOs from the carts retrieved
         List<CartDTO> cartDTOs = carts.stream()
                 .map(cart -> {
-                    // Mapear cada cart a CartDTO.
+                    // Map each Cart to CartDTO using ModelMapper
                     CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
-                    // Crear una lista de ProductDTOs a partir de los cart items.
+                    // Create a list of ProductDTOs from the cart items
                     List<ProductDTO> products = cart.getCartItems().stream()
-                            // Mapear cada producto dentro del cartItem a productDTO.
-                            .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class))
+                            .map(ci -> {
+                                ProductDTO productDTO = modelMapper.map(ci.getProduct(), ProductDTO.class);
+                                productDTO.setQuantity(ci.getQuantity()); // Set the quantity of the cart item to the ProductDTO, because the product has the stock quantity
+                                return productDTO;
+                            })
                             .toList();
-                    // Setear la lista de ProductDTOs en el CartDTO.
+                    // Set the products in the CartDTO
                     cartDTO.setProducts(products);
                     return cartDTO;
-                }).toList();
+                }).toList(); // Collect the CartDTOs into a list
 
         return cartDTOs;
+    }
+
+    @Override
+    public CartDTO getCartLoggedUser() {
+
+        // Get the logged-in user's email and find their cart
+        String email = authUtil.loggedInEmail();
+        Cart cart = cartRepository.findCartByEmail(email);
+        if (cart == null) {
+            throw new ApiException("Cart not found for user with email: " + email, HttpStatus.NOT_FOUND);
+        }
+
+        // Map the Cart to CartDTO and add the products from the cart items
+        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+        List<ProductDTO> productDTOs = cart.getCartItems().stream()
+                .map(cartItem -> {
+                    ProductDTO productDTO = modelMapper.map(cartItem.getProduct(), ProductDTO.class);
+                    productDTO.setQuantity(cartItem.getQuantity());
+                    return productDTO;
+                }).collect(Collectors.toList());
+        cartDTO.setProducts(productDTOs);
+
+        return cartDTO;
     }
 }

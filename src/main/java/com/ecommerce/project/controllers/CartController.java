@@ -3,7 +3,9 @@ package com.ecommerce.project.controllers;
 import com.ecommerce.project.payload.CartDTO;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.services.CartService;
+import com.ecommerce.project.util.AuthUtil;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +34,11 @@ public class CartController {
     public ResponseEntity<List<CartDTO>> getAllCarts() {
         List<CartDTO> cartDTOs = cartService.getAllCarts();
         return new ResponseEntity<>(cartDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("/carts/users/cart")
+    public ResponseEntity<CartDTO> getCartLoggedUser() {
+        CartDTO cartDTO = cartService.getCartLoggedUser();
+        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 }
