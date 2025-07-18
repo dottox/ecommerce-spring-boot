@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.id = ?1 AND ci.product.id = ?2")
-    Optional<CartItem> findCartItemByCartIdAndProductId(Long cartId, Long productId);
+    CartItem findCartItemByCartIdAndProductId(Long cartId, Long productId);
     // Additional methods for CartItem can be defined here if needed
 }
