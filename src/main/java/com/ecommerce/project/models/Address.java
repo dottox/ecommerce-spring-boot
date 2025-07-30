@@ -1,8 +1,7 @@
 package com.ecommerce.project.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
 
-    @NotBlank
-    @Size(min = 1, max = 5, message = "Number must be between 1 and 5 characters")
+    @NotNull
+    @Min(value = 1, message = "Number must be greater than 0")
+    @Max(value = 9999, message = "Number must be less than 10000")
     private Integer number;
 
     @NotBlank
@@ -43,12 +43,13 @@ public class Address {
     private String country;
 
     @NotBlank
-    @Size(min = 6, max = 10, message = "Pincode must be between 6 and 10 characters")
+    @Size(min = 4, max = 10, message = "Pincode must be between 6 and 10 characters")
     private String pincode;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "addresses")
-    private List<User> users = new ArrayList<>();
+    @JoinColumn(name = "user_id")
+    @ManyToOne()
+    private User user;
 
     public Address(Integer number, String street, String city, String state, String country, String pincode) {
         this.number = number;
