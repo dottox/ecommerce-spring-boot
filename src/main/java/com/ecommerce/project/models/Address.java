@@ -22,28 +22,21 @@ public class Address {
     private Long addressId;
 
     @NotNull
-    @Min(value = 1, message = "Number must be greater than 0")
-    @Max(value = 9999, message = "Number must be less than 10000")
     private Integer number;
 
     @NotBlank
-    @Size(min = 3, max = 50, message = "Street must be between 3 and 50 characters")
     private String street;
 
     @NotBlank
-    @Size(min = 2, max = 30, message = "City must be between 2 and 30 characters")
     private String city;
 
     @NotBlank
-    @Size(min = 2, max = 30, message = "State must be between 2 and 30 characters")
     private String state;
 
     @NotBlank
-    @Size(min = 2, max = 20, message = "Country must be between 2 and 20 characters")
     private String country;
 
     @NotBlank
-    @Size(min = 4, max = 10, message = "Pincode must be between 6 and 10 characters")
     private String pincode;
 
     @ToString.Exclude
