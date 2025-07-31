@@ -11,6 +11,8 @@ import com.ecommerce.project.security.request.SignupRequest;
 import com.ecommerce.project.security.response.MessageResponse;
 import com.ecommerce.project.security.response.UserInfoResponse;
 import com.ecommerce.project.security.services.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,8 @@ public class AuthController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Tag(name = "Authentication", description = "APIs for user authentication and registration")
+    @Operation(summary = "Sign In", description = "API to authenticate user and set JWT cookie")
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest) {
         Authentication authentication;
@@ -83,6 +87,8 @@ public class AuthController {
                 .body(response);
     }
 
+    @Tag(name = "Authentication", description = "APIs for user authentication and registration")
+    @Operation(summary = "Sign Up", description = "API to register a new user")
     @PostMapping("/signup")
     public ResponseEntity<MessageResponse> signUp(@Valid @RequestBody SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
@@ -138,6 +144,8 @@ public class AuthController {
                 .body(new MessageResponse("User registered successfully!"));
     }
 
+    @Tag(name = "Authentication", description = "APIs for user authentication and registration")
+    @Operation(summary = "Get User Details", description = "API to retrieve details of the authenticated user")
     @GetMapping("/user")
     public ResponseEntity<UserInfoResponse> getUserDetails(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -155,6 +163,8 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Tag(name = "Authentication", description = "APIs for user authentication and registration")
+    @Operation(summary = "Sign Out", description = "API to sign out the user and clear JWT cookie")
     @PostMapping("/signout")
     public ResponseEntity<MessageResponse> signOut() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
