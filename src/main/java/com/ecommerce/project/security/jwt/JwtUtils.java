@@ -32,14 +32,14 @@ public class JwtUtils {
     private String jwtCookie;
 
     // Extracts the JWT from the Authorization header of the request
-    /*public String getJwtFromHeader(HttpServletRequest request) {
+    public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         logger.debug("Authorization Header: {}", bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7); // Remove Bearer prefix
         }
         return null;
-    }*/
+    }
 
     // Extracts the JWT from the cookies of the request
     public String getJwtFromCookies(HttpServletRequest request) {
