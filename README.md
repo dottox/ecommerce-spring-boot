@@ -1,7 +1,6 @@
-## E-commerce Project
+## E-commerce Project Backend
 
 🚀 Project from a +90 hours [course](https://www.udemy.com/course/spring-boot-using-intellij-build-a-real-world-project/)
-
 
 ### Learnings
 - **API theory**
@@ -10,11 +9,9 @@
   - Status
   - Exception Handling
   - Pagination and sorting
-- **Java**
-  - DTOs
-  - Controller, service, repository
 - **Spring Boot**
-  - Persistence
+  - DTOs
+  - Models, controllers, services, repositories
   - JPA (Jakarta Persistence API)
   - Lombok
 - **Databases**
@@ -22,6 +19,11 @@
   - PostgreSQL & MySQL
 - **Security**
   - Spring Security
-  - JWT
+  - JWT (Header and cookie based)
   - Customizing auth
+- **Documentation**
+  - Spring docs
+  - Swagger
+  - OpenAPI
 - **Postman**
+- **IntelliJ IDEA**
